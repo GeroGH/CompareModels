@@ -51,6 +51,7 @@ namespace CompareTwoModels
             this.DataGrid.AllowUserToAddRows = false;
             this.DataGrid.ReadOnly = true;
             this.DataGrid.ColumnHeadersVisible = true;
+            this.DataGrid.DefaultCellStyle.BackColor = Color.Yellow;
 
             var ds = new DataSet();
             ds.DataSetName = "DataSet";
@@ -74,7 +75,7 @@ namespace CompareTwoModels
             this.DataGrid.AllowUserToAddRows = false;
             this.DataGrid.ReadOnly = true;
             this.DataGrid.ColumnHeadersVisible = true;
-            this.DataGrid.DefaultCellStyle.BackColor = Color.Beige;
+            this.DataGrid.DefaultCellStyle.BackColor = Color.White;
         }
 
         private void Compare_Click(object sender, EventArgs e)
@@ -103,7 +104,7 @@ namespace CompareTwoModels
 
                     if (beamCOID.Equals(rowCOID))
                     {
-                        row.DefaultCellStyle.BackColor = Color.DeepSkyBlue;
+                        row.DefaultCellStyle.BackColor = Color.LimeGreen;
                         continue;
                     }
 
@@ -122,13 +123,13 @@ namespace CompareTwoModels
                         if (beamProfile != rowProfile)
                         {
                             row.Cells[1].Value = beamProfile;
-                            row.Cells[1].Style.BackColor = Color.DarkCyan;
+                            row.Cells[1].Style.BackColor = Color.Yellow;
                         }
 
                         if (beamAssemblyNumber != rowAssemblyNumber)
                         {
                             row.Cells[2].Value = beamAssemblyNumber;
-                            row.Cells[2].Style.BackColor = Color.DarkMagenta;
+                            row.Cells[2].Style.BackColor = Color.Yellow;
                         }
                         continue;
                     }
@@ -148,48 +149,56 @@ namespace CompareTwoModels
                         if (beamStartX != rowStartX)
                         {
                             row.Cells[3].Value = beamStartX;
-                            row.Cells[3].Style.BackColor = Color.YellowGreen;
+                            row.Cells[3].Style.BackColor = Color.Yellow;
                         }
                         if (beamStartY != rowStartY)
                         {
                             row.Cells[4].Value = beamStartY;
-                            row.Cells[4].Style.BackColor = Color.YellowGreen;
+                            row.Cells[4].Style.BackColor = Color.Yellow;
                         }
                         if (beamStartZ != rowStartZ)
                         {
                             row.Cells[5].Value = beamStartZ;
-                            row.Cells[5].Style.BackColor = Color.YellowGreen;
+                            row.Cells[5].Style.BackColor = Color.Yellow;
                         }
 
                         if (beamEndX != rowEndX)
                         {
                             row.Cells[6].Value = beamEndX;
-                            row.Cells[6].Style.BackColor = Color.YellowGreen;
+                            row.Cells[6].Style.BackColor = Color.Yellow;
                         }
                         if (beamEndY != rowEndY)
                         {
                             row.Cells[7].Value = beamEndY;
-                            row.Cells[7].Style.BackColor = Color.YellowGreen;
+                            row.Cells[7].Style.BackColor = Color.Yellow;
                         }
                         if (beamEndZ != rowEndZ)
                         {
                             row.Cells[8].Value = beamEndZ;
-                            row.Cells[8].Style.BackColor = Color.YellowGreen;
+                            row.Cells[8].Style.BackColor = Color.Yellow;
                         }
 
                         if (beamProfile != rowProfile)
                         {
                             row.Cells[1].Value = beamProfile;
-                            row.Cells[1].Style.BackColor = Color.DarkCyan;
+                            row.Cells[1].Style.BackColor = Color.Yellow;
                         }
 
                         if (beamAssemblyNumber != rowAssemblyNumber)
                         {
                             row.Cells[2].Value = beamAssemblyNumber;
-                            row.Cells[2].Style.BackColor = Color.DarkMagenta;
+                            row.Cells[2].Style.BackColor = Color.Yellow;
                         }
 
                         continue;
+                    }
+                }
+
+                foreach (DataGridViewRow row in rows)
+                {
+                    if (row.DefaultCellStyle.BackColor == Color.White)
+                    {
+                        row.DefaultCellStyle.BackColor = Color.Red;
                     }
                 }
             }
