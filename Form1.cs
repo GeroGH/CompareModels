@@ -11,6 +11,7 @@ namespace CompareTwoModels
 {
     public partial class CompareTwoModels : Form
     {
+        private int Delta = 100;
         private DataTable DataTable;
         private readonly List<Beam> BeamsList = new List<Beam>();
 
@@ -80,31 +81,36 @@ namespace CompareTwoModels
 
         private void Compare_Click(object sender, EventArgs e)
         {
-            var delta = 50d;
+
+            if (!this.DataGrid.Columns.Contains("Change"))
+            {
+                this.DataGrid.Columns.Add("Change", "Change");
+            }
 
             this.CollectBeamsFromTheModel();
+
+            var rows = this.DataGrid.Rows;
 
             foreach (var beam in this.BeamsList)
             {
                 ExtractDataFromBeam(beam, out var beamProfile, out var beamAssemblyNumber, out var beamStartX, out var beamStartY, out var beamStartZ, out var beamEndX, out var beamEndY, out var beamEndZ, out var beamCOID);
 
-                var rows = this.DataGrid.Rows;
-
                 foreach (DataGridViewRow row in rows)
                 {
-                    var rowCOID = row.Cells[0].Value.ToString();
-                    var rowProfile = row.Cells[1].Value.ToString();
-                    var rowAssemblyNumber = row.Cells[2].Value.ToString();
-                    var rowStartX = Convert.ToDouble(row.Cells[3].Value.ToString());
-                    var rowStartY = Convert.ToDouble(row.Cells[4].Value.ToString());
-                    var rowStartZ = Convert.ToDouble(row.Cells[5].Value.ToString());
-                    var rowEndX = Convert.ToDouble(row.Cells[6].Value.ToString());
-                    var rowEndY = Convert.ToDouble(row.Cells[7].Value.ToString());
-                    var rowEndZ = Convert.ToDouble(row.Cells[8].Value.ToString());
+                    var rowCOID = row.Cells["COID"].Value.ToString();
+                    var rowProfile = row.Cells["Profile"].Value.ToString();
+                    var rowAssemblyNumber = row.Cells["AssemblyNumber"].Value.ToString();
+                    var rowStartX = Convert.ToDouble(row.Cells["StartX"].Value.ToString());
+                    var rowStartY = Convert.ToDouble(row.Cells["StartY"].Value.ToString());
+                    var rowStartZ = Convert.ToDouble(row.Cells["StartZ"].Value.ToString());
+                    var rowEndX = Convert.ToDouble(row.Cells["EndX"].Value.ToString());
+                    var rowEndY = Convert.ToDouble(row.Cells["EndY"].Value.ToString());
+                    var rowEndZ = Convert.ToDouble(row.Cells["EndZ"].Value.ToString());
 
                     if (beamCOID.Equals(rowCOID))
                     {
                         row.DefaultCellStyle.BackColor = Color.LimeGreen;
+                        row.Cells["Change"].Value += "No Change ";
                         continue;
                     }
 
@@ -122,84 +128,105 @@ namespace CompareTwoModels
                     {
                         if (beamProfile != rowProfile)
                         {
-                            row.Cells[1].Value = beamProfile;
-                            row.Cells[1].Style.BackColor = Color.Yellow;
+                            row.Cells["Change"].Value += "Profile ";
+                            row.Cells["Profile"].Value = beamProfile;
+                            row.DefaultCellStyle.BackColor = Color.Yellow;
+                            row.Cells["Profile"].Style.BackColor = Color.Magenta;
                         }
 
                         if (beamAssemblyNumber != rowAssemblyNumber)
                         {
-                            row.Cells[2].Value = beamAssemblyNumber;
-                            row.Cells[2].Style.BackColor = Color.Yellow;
+                            row.Cells["Change"].Value += "Assembly ";
+                            row.Cells["AssemblyNumber"].Value = beamAssemblyNumber;
+                            row.DefaultCellStyle.BackColor = Color.Yellow;
+                            row.Cells["AssemblyNumber"].Style.BackColor = Color.Magenta;
                         }
                         continue;
                     }
 
-                    var startCoorClose = (rowStartX - delta < beamStartX && beamStartX < rowStartX + delta)
-                                       & (rowStartY - delta < beamStartY && beamStartY < rowStartY + delta)
-                                       & (rowStartZ - delta < beamStartZ && beamStartZ < rowStartZ + delta);
+                    var startCoorClose = (rowStartX - this.Delta < beamStartX && beamStartX < rowStartX + this.Delta)
+                                       & (rowStartY - this.Delta < beamStartY && beamStartY < rowStartY + this.Delta)
+                                       & (rowStartZ - this.Delta < beamStartZ && beamStartZ < rowStartZ + this.Delta);
 
-                    var endCoorClose = (rowEndX - delta < beamEndX && beamEndX < rowEndX + delta)
-                                     & (rowEndY - delta < beamEndY && beamEndY < rowEndY + delta)
-                                     & (rowEndZ - delta < beamEndZ && beamEndZ < rowEndZ + delta);
+                    var endCoorClose = (rowEndX - this.Delta < beamEndX && beamEndX < rowEndX + this.Delta)
+                                     & (rowEndY - this.Delta < beamEndY && beamEndY < rowEndY + this.Delta)
+                                     & (rowEndZ - this.Delta < beamEndZ && beamEndZ < rowEndZ + this.Delta);
 
                     var coorClose = startCoorClose & endCoorClose;
 
                     if (coorClose)
                     {
-                        if (beamStartX != rowStartX)
-                        {
-                            row.Cells[3].Value = beamStartX;
-                            row.Cells[3].Style.BackColor = Color.Yellow;
-                        }
-                        if (beamStartY != rowStartY)
-                        {
-                            row.Cells[4].Value = beamStartY;
-                            row.Cells[4].Style.BackColor = Color.Yellow;
-                        }
-                        if (beamStartZ != rowStartZ)
-                        {
-                            row.Cells[5].Value = beamStartZ;
-                            row.Cells[5].Style.BackColor = Color.Yellow;
-                        }
-
-                        if (beamEndX != rowEndX)
-                        {
-                            row.Cells[6].Value = beamEndX;
-                            row.Cells[6].Style.BackColor = Color.Yellow;
-                        }
-                        if (beamEndY != rowEndY)
-                        {
-                            row.Cells[7].Value = beamEndY;
-                            row.Cells[7].Style.BackColor = Color.Yellow;
-                        }
-                        if (beamEndZ != rowEndZ)
-                        {
-                            row.Cells[8].Value = beamEndZ;
-                            row.Cells[8].Style.BackColor = Color.Yellow;
-                        }
-
                         if (beamProfile != rowProfile)
                         {
-                            row.Cells[1].Value = beamProfile;
-                            row.Cells[1].Style.BackColor = Color.Yellow;
+                            row.Cells["Change"].Value += "Profile ";
+                            row.Cells["Profile"].Value = beamProfile;
+                            row.DefaultCellStyle.BackColor = Color.Yellow;
+                            row.Cells["Profile"].Style.BackColor = Color.Magenta;
                         }
 
                         if (beamAssemblyNumber != rowAssemblyNumber)
                         {
-                            row.Cells[2].Value = beamAssemblyNumber;
-                            row.Cells[2].Style.BackColor = Color.Yellow;
+                            row.Cells["Change"].Value += "Assembly ";
+                            row.Cells["AssemblyNumber"].Value = beamAssemblyNumber;
+                            row.DefaultCellStyle.BackColor = Color.Yellow;
+                            row.Cells["AssemblyNumber"].Style.BackColor = Color.Magenta;
+                        }
+
+                        if (beamStartX != rowStartX)
+                        {
+                            row.Cells["Change"].Value += "StartX ";
+                            row.Cells["StartX"].Value = beamStartX;
+                            row.DefaultCellStyle.BackColor = Color.Yellow;
+                            row.Cells["StartX"].Style.BackColor = Color.Magenta;
+                        }
+                        if (beamStartY != rowStartY)
+                        {
+                            row.Cells["Change"].Value += "StartY ";
+                            row.Cells["StartY"].Value = beamStartY;
+                            row.DefaultCellStyle.BackColor = Color.Yellow;
+                            row.Cells["StartY"].Style.BackColor = Color.Magenta;
+                        }
+                        if (beamStartZ != rowStartZ)
+                        {
+                            row.Cells["Change"].Value += "StartZ ";
+                            row.Cells["StartZ"].Value = beamStartZ;
+                            row.DefaultCellStyle.BackColor = Color.Yellow;
+                            row.Cells["StartZ"].Style.BackColor = Color.Magenta;
+                        }
+
+                        if (beamEndX != rowEndX)
+                        {
+                            row.Cells["Change"].Value += "EndX ";
+                            row.Cells["EndX"].Value = beamEndX;
+                            row.DefaultCellStyle.BackColor = Color.Yellow;
+                            row.Cells["EndX"].Style.BackColor = Color.Magenta;
+                        }
+                        if (beamEndY != rowEndY)
+                        {
+                            row.Cells["Change"].Value += "EndY ";
+                            row.Cells["EndY"].Value = beamEndY;
+                            row.DefaultCellStyle.BackColor = Color.Yellow;
+                            row.Cells["EndY"].Style.BackColor = Color.Magenta;
+                        }
+                        if (beamEndZ != rowEndZ)
+                        {
+                            row.Cells["Change"].Value += "EndZ ";
+                            row.Cells["EndZ"].Value = beamEndZ;
+                            row.DefaultCellStyle.BackColor = Color.Yellow;
+                            row.Cells["EndZ"].Style.BackColor = Color.Magenta;
                         }
 
                         continue;
                     }
                 }
+            }
 
-                foreach (DataGridViewRow row in rows)
+            foreach (DataGridViewRow row in rows)
+            {
+                if (row.Cells["Change"].Value is null)
                 {
-                    if (row.DefaultCellStyle.BackColor == Color.White)
-                    {
-                        row.DefaultCellStyle.BackColor = Color.Red;
-                    }
+                    row.Cells["Change"].Value += "Beam Deleted ";
+                    row.DefaultCellStyle.BackColor = Color.Red;
                 }
             }
         }
@@ -246,6 +273,11 @@ namespace CompareTwoModels
             EndZ = Math.Round(beam.EndPoint.Z);
 
             COID = $"{Profile},{AssemblyNumber},{StartX},{StartY},{StartZ},{EndX},{EndY},{EndZ}";
+        }
+
+        private void Delta_TextChanged(object sender, EventArgs e)
+        {
+            //this.Delta = int.Parse(this.DeltaValue.Text);
         }
     }
 }
