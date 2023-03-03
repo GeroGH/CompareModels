@@ -4,6 +4,8 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using Tekla.Structures;
+using Tekla.Structures.Catalogs;
 using Tekla.Structures.Model;
 using ModelObjectSelector = Tekla.Structures.Model.UI.ModelObjectSelector;
 
@@ -30,6 +32,20 @@ namespace CompareTwoModels
             this.DataTable.Columns.Add("EndX", typeof(string));
             this.DataTable.Columns.Add("EndY", typeof(string));
             this.DataTable.Columns.Add("EndZ", typeof(string));
+
+            var up = new UserPropertyItem
+            {
+                Name = "Status",
+                Level = UserPropertyLevelEnum.LEVEL_MODEL,
+                FieldType = UserPropertyFieldTypeEnum.FIELDTYPE_TEXT,
+                Type = PropertyTypeEnum.TYPE_STRING,
+                Visibility = UserPropertyVisibilityEnum.VISIBILITY_NORMAL,
+                Unique = true,
+                AffectsNumbering = false
+            };
+            up.Insert();
+            up.SetLabel("Status");
+            up.AddToObjectType(CatalogObjectTypeEnum.STEEL_BEAM);
         }
 
         private void Export_Click(object sender, System.EventArgs e)
@@ -45,14 +61,14 @@ namespace CompareTwoModels
             this.DataTable = this.DataTable.DefaultView.ToTable(true);
             this.DataTable.DefaultView.Sort = "COID";
 
-            this.DataGrid.DataSource = this.DataTable;
-            this.DataGrid.RowHeadersVisible = false;
-            this.DataGrid.AllowUserToResizeRows = true;
-            this.DataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            this.DataGrid.AllowUserToAddRows = false;
-            this.DataGrid.ReadOnly = true;
-            this.DataGrid.ColumnHeadersVisible = true;
-            this.DataGrid.DefaultCellStyle.BackColor = Color.Yellow;
+            this.DataGridView.DataSource = this.DataTable;
+            this.DataGridView.RowHeadersVisible = false;
+            this.DataGridView.AllowUserToResizeRows = true;
+            this.DataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            this.DataGridView.AllowUserToAddRows = false;
+            this.DataGridView.ReadOnly = true;
+            this.DataGridView.ColumnHeadersVisible = true;
+            this.DataGridView.DefaultCellStyle.BackColor = Color.Yellow;
 
             var ds = new DataSet();
             ds.DataSetName = "DataSet";
@@ -69,30 +85,36 @@ namespace CompareTwoModels
             this.DataTable = ds.Tables["ModelData"];
             this.DataTable = this.DataTable.DefaultView.ToTable(true);
             this.DataTable.DefaultView.Sort = "COID";
-            this.DataGrid.DataSource = this.DataTable;
-            this.DataGrid.RowHeadersVisible = false;
-            this.DataGrid.AllowUserToResizeRows = true;
-            this.DataGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            this.DataGrid.AllowUserToAddRows = false;
-            this.DataGrid.ReadOnly = true;
-            this.DataGrid.ColumnHeadersVisible = true;
-            this.DataGrid.DefaultCellStyle.BackColor = Color.White;
+            this.DataGridView.DataSource = this.DataTable;
+            this.DataGridView.RowHeadersVisible = false;
+            this.DataGridView.AllowUserToResizeRows = true;
+            this.DataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            this.DataGridView.AllowUserToAddRows = false;
+            this.DataGridView.ReadOnly = true;
+            this.DataGridView.ColumnHeadersVisible = true;
+            this.DataGridView.DefaultCellStyle.BackColor = Color.White;
         }
 
         private void Compare_Click(object sender, EventArgs e)
         {
-
-            if (!this.DataGrid.Columns.Contains("Change"))
+            foreach (var beam in this.BeamsList)
             {
-                this.DataGrid.Columns.Add("Change", "Change");
+                beam.SetUserProperty("Status", "");
+            }
+
+            if (!this.DataGridView.Columns.Contains("Change"))
+            {
+                this.DataGridView.Columns.Add("Change", "Change");
             }
 
             this.CollectBeamsFromTheModel();
 
-            var rows = this.DataGrid.Rows;
+            var rows = this.DataGridView.Rows;
 
             foreach (var beam in this.BeamsList)
             {
+                var status = string.Empty;
+
                 ExtractDataFromBeam(beam, out var beamProfile, out var beamAssemblyNumber, out var beamStartX, out var beamStartY, out var beamStartZ, out var beamEndX, out var beamEndY, out var beamEndZ, out var beamCOID);
 
                 foreach (DataGridViewRow row in rows)
@@ -110,7 +132,9 @@ namespace CompareTwoModels
                     if (beamCOID.Equals(rowCOID))
                     {
                         row.DefaultCellStyle.BackColor = Color.LimeGreen;
-                        row.Cells["Change"].Value += "No Change ";
+                        status += "No Change ";
+                        row.Cells["Change"].Value = status;
+                        beam.SetUserProperty("Status", status);
                         continue;
                     }
 
@@ -128,7 +152,10 @@ namespace CompareTwoModels
                     {
                         if (beamProfile != rowProfile)
                         {
-                            row.Cells["Change"].Value += "Profile ";
+                            status += "Profile ";
+                            row.Cells["Change"].Value = status;
+                            beam.SetUserProperty("Status", status);
+
                             row.Cells["Profile"].Value = beamProfile;
                             row.DefaultCellStyle.BackColor = Color.Yellow;
                             row.Cells["Profile"].Style.BackColor = Color.Magenta;
@@ -136,7 +163,10 @@ namespace CompareTwoModels
 
                         if (beamAssemblyNumber != rowAssemblyNumber)
                         {
-                            row.Cells["Change"].Value += "Assembly ";
+                            status += "Assembly ";
+                            row.Cells["Change"].Value = status;
+                            beam.SetUserProperty("Status", status);
+
                             row.Cells["AssemblyNumber"].Value = beamAssemblyNumber;
                             row.DefaultCellStyle.BackColor = Color.Yellow;
                             row.Cells["AssemblyNumber"].Style.BackColor = Color.Magenta;
@@ -158,7 +188,10 @@ namespace CompareTwoModels
                     {
                         if (beamProfile != rowProfile)
                         {
-                            row.Cells["Change"].Value += "Profile ";
+                            status += "Profile ";
+                            row.Cells["Change"].Value = status;
+                            beam.SetUserProperty("Status", status);
+
                             row.Cells["Profile"].Value = beamProfile;
                             row.DefaultCellStyle.BackColor = Color.Yellow;
                             row.Cells["Profile"].Style.BackColor = Color.Magenta;
@@ -166,7 +199,10 @@ namespace CompareTwoModels
 
                         if (beamAssemblyNumber != rowAssemblyNumber)
                         {
-                            row.Cells["Change"].Value += "Assembly ";
+                            status += "Assembly ";
+                            row.Cells["Change"].Value = status;
+                            beam.SetUserProperty("Status", status);
+
                             row.Cells["AssemblyNumber"].Value = beamAssemblyNumber;
                             row.DefaultCellStyle.BackColor = Color.Yellow;
                             row.Cells["AssemblyNumber"].Style.BackColor = Color.Magenta;
@@ -174,21 +210,30 @@ namespace CompareTwoModels
 
                         if (beamStartX != rowStartX)
                         {
-                            row.Cells["Change"].Value += "StartX ";
+                            status += "StartX ";
+                            row.Cells["Change"].Value = status;
+                            beam.SetUserProperty("Status", status);
+
                             row.Cells["StartX"].Value = beamStartX;
                             row.DefaultCellStyle.BackColor = Color.Yellow;
                             row.Cells["StartX"].Style.BackColor = Color.Magenta;
                         }
                         if (beamStartY != rowStartY)
                         {
-                            row.Cells["Change"].Value += "StartY ";
+                            status += "StartY ";
+                            row.Cells["Change"].Value = status;
+                            beam.SetUserProperty("Status", status);
+
                             row.Cells["StartY"].Value = beamStartY;
                             row.DefaultCellStyle.BackColor = Color.Yellow;
                             row.Cells["StartY"].Style.BackColor = Color.Magenta;
                         }
                         if (beamStartZ != rowStartZ)
                         {
-                            row.Cells["Change"].Value += "StartZ ";
+                            status += "StartZ ";
+                            row.Cells["Change"].Value = status;
+                            beam.SetUserProperty("Status", status);
+
                             row.Cells["StartZ"].Value = beamStartZ;
                             row.DefaultCellStyle.BackColor = Color.Yellow;
                             row.Cells["StartZ"].Style.BackColor = Color.Magenta;
@@ -196,21 +241,30 @@ namespace CompareTwoModels
 
                         if (beamEndX != rowEndX)
                         {
-                            row.Cells["Change"].Value += "EndX ";
+                            status += "EndX ";
+                            row.Cells["Change"].Value = status;
+                            beam.SetUserProperty("Status", status);
+
                             row.Cells["EndX"].Value = beamEndX;
                             row.DefaultCellStyle.BackColor = Color.Yellow;
                             row.Cells["EndX"].Style.BackColor = Color.Magenta;
                         }
                         if (beamEndY != rowEndY)
                         {
-                            row.Cells["Change"].Value += "EndY ";
+                            status += "EndY ";
+                            row.Cells["Change"].Value = status;
+                            beam.SetUserProperty("Status", status);
+
                             row.Cells["EndY"].Value = beamEndY;
                             row.DefaultCellStyle.BackColor = Color.Yellow;
                             row.Cells["EndY"].Style.BackColor = Color.Magenta;
                         }
                         if (beamEndZ != rowEndZ)
                         {
-                            row.Cells["Change"].Value += "EndZ ";
+                            status += "EndZ ";
+                            row.Cells["Change"].Value = status;
+                            beam.SetUserProperty("Status", status);
+
                             row.Cells["EndZ"].Value = beamEndZ;
                             row.DefaultCellStyle.BackColor = Color.Yellow;
                             row.Cells["EndZ"].Style.BackColor = Color.Magenta;
@@ -225,8 +279,28 @@ namespace CompareTwoModels
             {
                 if (row.Cells["Change"].Value is null)
                 {
-                    row.Cells["Change"].Value += "Beam Deleted ";
+                    row.Cells["Change"].Value += "Beam Deleted";
                     row.DefaultCellStyle.BackColor = Color.Red;
+                }
+            }
+
+            foreach (var beam in this.BeamsList)
+            {
+                var status = string.Empty;
+                beam.GetReportProperty("Status", ref status);
+                if (status == "")
+                {
+                    ExtractDataFromBeam(beam, out var Profile, out var AssemblyNumber, out var StartX, out var StartY, out var StartZ, out var EndX, out var EndY, out var EndZ, out var COID);
+                    this.DataTable.Rows.Add(COID, Profile, AssemblyNumber, StartX, StartY, StartZ, EndX, EndY, EndZ);
+                }
+            }
+
+            foreach (DataGridViewRow row in rows)
+            {
+                if (row.Cells["Change"].Value is null)
+                {
+                    row.Cells["Change"].Value += "Beam Added";
+                    row.DefaultCellStyle.BackColor = Color.DodgerBlue;
                 }
             }
         }
@@ -277,7 +351,9 @@ namespace CompareTwoModels
 
         private void Delta_TextChanged(object sender, EventArgs e)
         {
-            //this.Delta = int.Parse(this.DeltaValue.Text);
+            this.DeltaBox.Text = this.DeltaBox.Text;
+            this.DeltaBox.ForeColor = Color.Firebrick;
+            this.Delta = int.Parse(this.DeltaBox.Text);
         }
     }
 }

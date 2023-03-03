@@ -30,16 +30,16 @@
         {
             this.Export = new System.Windows.Forms.Button();
             this.Import = new System.Windows.Forms.Button();
-            this.DataGrid = new System.Windows.Forms.DataGridView();
+            this.DataGridView = new System.Windows.Forms.DataGridView();
             this.Compare = new System.Windows.Forms.Button();
             this.DeltaBox = new System.Windows.Forms.TextBox();
-            this.DeltaValue = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid)).BeginInit();
+            this.DeltaLabel = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // Export
             // 
-            this.Export.Location = new System.Drawing.Point(1128, 12);
+            this.Export.Location = new System.Drawing.Point(1053, 12);
             this.Export.Name = "Export";
             this.Export.Size = new System.Drawing.Size(264, 59);
             this.Export.TabIndex = 0;
@@ -49,7 +49,7 @@
             // 
             // Import
             // 
-            this.Import.Location = new System.Drawing.Point(1128, 77);
+            this.Import.Location = new System.Drawing.Point(1053, 77);
             this.Import.Name = "Import";
             this.Import.Size = new System.Drawing.Size(264, 59);
             this.Import.TabIndex = 1;
@@ -57,17 +57,17 @@
             this.Import.UseVisualStyleBackColor = true;
             this.Import.Click += new System.EventHandler(this.Import_Click);
             // 
-            // DataGrid
+            // DataGridView
             // 
-            this.DataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGrid.Location = new System.Drawing.Point(13, 12);
-            this.DataGrid.Name = "DataGrid";
-            this.DataGrid.Size = new System.Drawing.Size(1109, 404);
-            this.DataGrid.TabIndex = 2;
+            this.DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.DataGridView.Location = new System.Drawing.Point(13, 12);
+            this.DataGridView.Name = "DataGridView";
+            this.DataGridView.Size = new System.Drawing.Size(1034, 404);
+            this.DataGridView.TabIndex = 2;
             // 
             // Compare
             // 
-            this.Compare.Location = new System.Drawing.Point(1128, 191);
+            this.Compare.Location = new System.Drawing.Point(1053, 191);
             this.Compare.Name = "Compare";
             this.Compare.Size = new System.Drawing.Size(264, 59);
             this.Compare.TabIndex = 3;
@@ -77,36 +77,36 @@
             // 
             // DeltaBox
             // 
-            this.DeltaBox.Location = new System.Drawing.Point(1268, 156);
+            this.DeltaBox.Location = new System.Drawing.Point(1193, 156);
             this.DeltaBox.Name = "DeltaBox";
             this.DeltaBox.Size = new System.Drawing.Size(107, 20);
             this.DeltaBox.TabIndex = 4;
             this.DeltaBox.Text = "100";
             this.DeltaBox.TextChanged += new System.EventHandler(this.Delta_TextChanged);
             // 
-            // DeltaValue
+            // DeltaLabel
             // 
-            this.DeltaValue.AutoSize = true;
-            this.DeltaValue.Location = new System.Drawing.Point(1150, 162);
-            this.DeltaValue.Name = "DeltaValue";
-            this.DeltaValue.Size = new System.Drawing.Size(60, 13);
-            this.DeltaValue.TabIndex = 5;
-            this.DeltaValue.Text = "Delta (mm):";
+            this.DeltaLabel.AutoSize = true;
+            this.DeltaLabel.Location = new System.Drawing.Point(1075, 162);
+            this.DeltaLabel.Name = "DeltaLabel";
+            this.DeltaLabel.Size = new System.Drawing.Size(60, 13);
+            this.DeltaLabel.TabIndex = 5;
+            this.DeltaLabel.Text = "Delta (mm):";
             // 
             // CompareTwoModels
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1404, 427);
-            this.Controls.Add(this.DeltaValue);
+            this.ClientSize = new System.Drawing.Size(1324, 427);
+            this.Controls.Add(this.DeltaLabel);
             this.Controls.Add(this.DeltaBox);
-            this.Controls.Add(this.DataGrid);
+            this.Controls.Add(this.DataGridView);
             this.Controls.Add(this.Compare);
             this.Controls.Add(this.Import);
             this.Controls.Add(this.Export);
             this.Name = "CompareTwoModels";
             this.Text = "CompareTwoModels";
-            ((System.ComponentModel.ISupportInitialize)(this.DataGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -116,10 +116,10 @@
 
         private System.Windows.Forms.Button Export;
         private System.Windows.Forms.Button Import;
-        private System.Windows.Forms.DataGridView DataGrid;
+        private System.Windows.Forms.DataGridView DataGridView;
         private System.Windows.Forms.Button Compare;
         private System.Windows.Forms.TextBox DeltaBox;
-        private System.Windows.Forms.Label DeltaValue;
+        private System.Windows.Forms.Label DeltaLabel;
     }
 }
 
