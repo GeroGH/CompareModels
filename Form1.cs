@@ -355,5 +355,23 @@ namespace CompareTwoModels
             this.DeltaBox.ForeColor = Color.Firebrick;
             this.Delta = int.Parse(this.DeltaBox.Text);
         }
+
+        private void UpdateSecondayParts(Beam beam, string status)
+        {
+            //var assembly = beam.GetAssembly();
+            //var secondaryParts = assembly.GetSecondaries();
+
+            //foreach (var secondaryPart in secondaryParts)
+            //{
+            //    var secondaryBeam = secondaryPart as Beam;
+            //    if (secondaryBeam == null)
+            //    {
+            //        continue;
+            //    }
+
+            //    secondaryBeam.SetUserProperty("Status", status);
+            //    secondaryBeam.Modify();
+            //}
+        }
     }
 }
