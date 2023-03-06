@@ -8,6 +8,8 @@ using Tekla.Structures;
 using Tekla.Structures.Catalogs;
 using Tekla.Structures.Model;
 using ModelObjectSelector = Tekla.Structures.Model.UI.ModelObjectSelector;
+using TSG = Tekla.Structures.Geometry3d;
+using TSMUI = Tekla.Structures.Model.UI;
 
 namespace CompareTwoModels
 {
@@ -50,6 +52,9 @@ namespace CompareTwoModels
 
         private void Export_Click(object sender, System.EventArgs e)
         {
+            TSMUI.ModelObjectVisualization.ClearAllTemporaryStates();
+            this.RedrawViews();
+
             this.CollectBeamsFromTheModel();
 
             foreach (var beam in this.BeamsList)
@@ -69,6 +74,7 @@ namespace CompareTwoModels
             this.DataGridView.ReadOnly = true;
             this.DataGridView.ColumnHeadersVisible = true;
             this.DataGridView.DefaultCellStyle.BackColor = Color.Yellow;
+            this.DataGridView.AllowUserToResizeRows = false;
 
             var ds = new DataSet();
             ds.DataSetName = "DataSet";
@@ -79,6 +85,9 @@ namespace CompareTwoModels
 
         private void Import_Click(object sender, EventArgs e)
         {
+            TSMUI.ModelObjectVisualization.ClearAllTemporaryStates();
+            this.RedrawViews();
+
             var ds = new DataSet();
             ds.ReadXml(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DataFile.xml"));
 
@@ -97,6 +106,9 @@ namespace CompareTwoModels
 
         private void Compare_Click(object sender, EventArgs e)
         {
+            TSMUI.ModelObjectVisualization.ClearAllTemporaryStates();
+            this.RedrawViews();
+
             foreach (var beam in this.BeamsList)
             {
                 beam.SetUserProperty("Status", "");
@@ -356,6 +368,78 @@ namespace CompareTwoModels
             this.Delta = int.Parse(this.DeltaBox.Text);
         }
 
+
+        private void buttonHighlightElements_Click(object sender, EventArgs e)
+        {
+            TSMUI.ModelObjectVisualization.ClearAllTemporaryStates();
+            this.RedrawViews();
+
+            var noChangeBeams = new List<Identifier>();
+            var addedBeams = new List<Identifier>();
+            var changedBeams = new List<Identifier>();
+
+            foreach (var beam in this.BeamsList)
+            {
+                var id = beam.Identifier;
+                var status = string.Empty;
+                beam.GetReportProperty("Status", ref status);
+
+                if (status.Contains("No Change"))
+                {
+                    noChangeBeams.Add(id);
+                    continue;
+                }
+
+                if (status.Contains("Beam Added"))
+                {
+                    addedBeams.Add(id);
+                    continue;
+                }
+
+                if (status.Contains("Profile") || status.Contains("Assembly") || status.Contains("Start") || status.Contains("End"))
+                {
+                    changedBeams.Add(id);
+                    continue;
+                }
+
+            }
+
+            TSMUI.ModelObjectVisualization.ClearAllTemporaryStates();
+            TSMUI.ModelObjectVisualization.SetTemporaryState(changedBeams, new TSMUI.Color(1, 1, 0));
+            TSMUI.ModelObjectVisualization.SetTemporaryState(addedBeams, new TSMUI.Color(0.1, 0.6, 1));
+            TSMUI.ModelObjectVisualization.SetTemporaryState(noChangeBeams, new TSMUI.Color(0.2, 0.8, 0.2));
+
+            var drawer = new TSMUI.GraphicsDrawer();
+            var rows = this.DataGridView.Rows;
+            foreach (DataGridViewRow row in rows)
+            {
+                if (row.Cells["Change"].Value.ToString().Contains("Beam Deleted"))
+                {
+                    var rowStartX = Convert.ToDouble(row.Cells["StartX"].Value.ToString());
+                    var rowStartY = Convert.ToDouble(row.Cells["StartY"].Value.ToString());
+                    var rowStartZ = Convert.ToDouble(row.Cells["StartZ"].Value.ToString());
+                    var rowEndX = Convert.ToDouble(row.Cells["EndX"].Value.ToString());
+                    var rowEndY = Convert.ToDouble(row.Cells["EndY"].Value.ToString());
+                    var rowEndZ = Convert.ToDouble(row.Cells["EndZ"].Value.ToString());
+                    var rowProfile = row.Cells["Profile"].Value.ToString();
+
+                    var sartPoint = new TSG.Point(rowStartX, rowStartY, rowStartZ);
+                    var endPoint = new TSG.Point(rowEndX, rowEndY, rowEndZ);
+                    var midpoint = new TSG.Point((rowStartX + rowEndX) / 2, (rowStartY + rowEndY) / 2, (rowStartZ + rowEndZ) / 2);
+
+                    drawer.DrawText(midpoint, rowProfile, new TSMUI.Color(1.0, 0.0, 0.0));
+                    drawer.DrawLineSegment(sartPoint, endPoint, new TSMUI.Color(1.0, 0.0, 0.0));
+                }
+            }
+        }
+        private void RedrawViews()
+        {
+            var VisibleViews = TSMUI.ViewHandler.GetVisibleViews();
+            while (VisibleViews.MoveNext())
+            {
+                TSMUI.ViewHandler.RedrawView(VisibleViews.Current);
+            }
+        }
         private void UpdateSecondayParts(Beam beam, string status)
         {
             //var assembly = beam.GetAssembly();

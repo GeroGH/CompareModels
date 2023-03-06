@@ -41,14 +41,15 @@
             this.BlueLabel = new System.Windows.Forms.Label();
             this.MagentaLabel = new System.Windows.Forms.Label();
             this.VersionLabel = new System.Windows.Forms.Label();
+            this.buttonHighlightElements = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // Export
             // 
-            this.Export.Location = new System.Drawing.Point(1053, 12);
+            this.Export.Location = new System.Drawing.Point(1030, 12);
             this.Export.Name = "Export";
-            this.Export.Size = new System.Drawing.Size(264, 59);
+            this.Export.Size = new System.Drawing.Size(237, 59);
             this.Export.TabIndex = 0;
             this.Export.Text = "Export Data";
             this.Export.UseVisualStyleBackColor = true;
@@ -56,9 +57,9 @@
             // 
             // Import
             // 
-            this.Import.Location = new System.Drawing.Point(1053, 84);
+            this.Import.Location = new System.Drawing.Point(1030, 85);
             this.Import.Name = "Import";
-            this.Import.Size = new System.Drawing.Size(264, 59);
+            this.Import.Size = new System.Drawing.Size(237, 59);
             this.Import.TabIndex = 1;
             this.Import.Text = "Import Data";
             this.Import.UseVisualStyleBackColor = true;
@@ -67,16 +68,16 @@
             // DataGridView
             // 
             this.DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGridView.Location = new System.Drawing.Point(11, 14);
+            this.DataGridView.Location = new System.Drawing.Point(10, 14);
             this.DataGridView.Name = "DataGridView";
-            this.DataGridView.Size = new System.Drawing.Size(1034, 411);
+            this.DataGridView.Size = new System.Drawing.Size(1012, 425);
             this.DataGridView.TabIndex = 2;
             // 
             // Compare
             // 
-            this.Compare.Location = new System.Drawing.Point(1053, 189);
+            this.Compare.Location = new System.Drawing.Point(1030, 192);
             this.Compare.Name = "Compare";
-            this.Compare.Size = new System.Drawing.Size(264, 59);
+            this.Compare.Size = new System.Drawing.Size(237, 59);
             this.Compare.TabIndex = 3;
             this.Compare.Text = "Compare";
             this.Compare.UseVisualStyleBackColor = true;
@@ -84,7 +85,7 @@
             // 
             // DeltaBox
             // 
-            this.DeltaBox.Location = new System.Drawing.Point(1210, 156);
+            this.DeltaBox.Location = new System.Drawing.Point(1160, 158);
             this.DeltaBox.Name = "DeltaBox";
             this.DeltaBox.Size = new System.Drawing.Size(107, 20);
             this.DeltaBox.TabIndex = 4;
@@ -94,7 +95,7 @@
             // DeltaLabel
             // 
             this.DeltaLabel.AutoSize = true;
-            this.DeltaLabel.Location = new System.Drawing.Point(1068, 163);
+            this.DeltaLabel.Location = new System.Drawing.Point(1094, 161);
             this.DeltaLabel.Name = "DeltaLabel";
             this.DeltaLabel.Size = new System.Drawing.Size(60, 13);
             this.DeltaLabel.TabIndex = 5;
@@ -114,7 +115,7 @@
             // 
             this.GreenLabel.AutoSize = true;
             this.GreenLabel.BackColor = System.Drawing.Color.LimeGreen;
-            this.GreenLabel.Location = new System.Drawing.Point(1068, 320);
+            this.GreenLabel.Location = new System.Drawing.Point(1039, 339);
             this.GreenLabel.Name = "GreenLabel";
             this.GreenLabel.Size = new System.Drawing.Size(163, 13);
             this.GreenLabel.TabIndex = 7;
@@ -124,7 +125,7 @@
             // 
             this.YellowLabel.AutoSize = true;
             this.YellowLabel.BackColor = System.Drawing.Color.Yellow;
-            this.YellowLabel.Location = new System.Drawing.Point(1068, 383);
+            this.YellowLabel.Location = new System.Drawing.Point(1039, 402);
             this.YellowLabel.Name = "YellowLabel";
             this.YellowLabel.Size = new System.Drawing.Size(150, 13);
             this.YellowLabel.TabIndex = 8;
@@ -134,7 +135,7 @@
             // 
             this.RedLabel.AutoSize = true;
             this.RedLabel.BackColor = System.Drawing.Color.Red;
-            this.RedLabel.Location = new System.Drawing.Point(1068, 341);
+            this.RedLabel.Location = new System.Drawing.Point(1039, 360);
             this.RedLabel.Name = "RedLabel";
             this.RedLabel.Size = new System.Drawing.Size(109, 13);
             this.RedLabel.TabIndex = 9;
@@ -144,7 +145,7 @@
             // 
             this.BlueLabel.AutoSize = true;
             this.BlueLabel.BackColor = System.Drawing.Color.DodgerBlue;
-            this.BlueLabel.Location = new System.Drawing.Point(1068, 362);
+            this.BlueLabel.Location = new System.Drawing.Point(1039, 381);
             this.BlueLabel.Name = "BlueLabel";
             this.BlueLabel.Size = new System.Drawing.Size(104, 13);
             this.BlueLabel.TabIndex = 10;
@@ -154,7 +155,7 @@
             // 
             this.MagentaLabel.AutoSize = true;
             this.MagentaLabel.BackColor = System.Drawing.Color.Magenta;
-            this.MagentaLabel.Location = new System.Drawing.Point(1068, 404);
+            this.MagentaLabel.Location = new System.Drawing.Point(1039, 423);
             this.MagentaLabel.Name = "MagentaLabel";
             this.MagentaLabel.Size = new System.Drawing.Size(167, 13);
             this.MagentaLabel.TabIndex = 11;
@@ -163,17 +164,28 @@
             // VersionLabel
             // 
             this.VersionLabel.AutoSize = true;
-            this.VersionLabel.Location = new System.Drawing.Point(1274, 404);
+            this.VersionLabel.Location = new System.Drawing.Point(1227, 423);
             this.VersionLabel.Name = "VersionLabel";
             this.VersionLabel.Size = new System.Drawing.Size(34, 13);
             this.VersionLabel.TabIndex = 12;
-            this.VersionLabel.Text = "v1.21";
+            this.VersionLabel.Text = "v2.21";
+            // 
+            // buttonHighlightElements
+            // 
+            this.buttonHighlightElements.Location = new System.Drawing.Point(1030, 265);
+            this.buttonHighlightElements.Name = "buttonHighlightElements";
+            this.buttonHighlightElements.Size = new System.Drawing.Size(237, 59);
+            this.buttonHighlightElements.TabIndex = 13;
+            this.buttonHighlightElements.Text = "Highlight Elements";
+            this.buttonHighlightElements.UseVisualStyleBackColor = true;
+            this.buttonHighlightElements.Click += new System.EventHandler(this.buttonHighlightElements_Click);
             // 
             // CompareTwoModels
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1324, 433);
+            this.ClientSize = new System.Drawing.Size(1277, 451);
+            this.Controls.Add(this.buttonHighlightElements);
             this.Controls.Add(this.VersionLabel);
             this.Controls.Add(this.MagentaLabel);
             this.Controls.Add(this.BlueLabel);
@@ -210,6 +222,7 @@
         private System.Windows.Forms.Label BlueLabel;
         private System.Windows.Forms.Label MagentaLabel;
         private System.Windows.Forms.Label VersionLabel;
+        private System.Windows.Forms.Button buttonHighlightElements;
     }
 }
 
