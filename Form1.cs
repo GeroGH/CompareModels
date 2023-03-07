@@ -304,6 +304,7 @@ namespace CompareTwoModels
                 {
                     ExtractDataFromBeam(beam, out var Profile, out var AssemblyNumber, out var StartX, out var StartY, out var StartZ, out var EndX, out var EndY, out var EndZ, out var COID);
                     this.DataTable.Rows.Add(COID, Profile, AssemblyNumber, StartX, StartY, StartZ, EndX, EndY, EndZ);
+                    beam.SetUserProperty("Status", "Beam Added");
                 }
             }
 
@@ -405,9 +406,9 @@ namespace CompareTwoModels
             }
 
             TSMUI.ModelObjectVisualization.ClearAllTemporaryStates();
-            TSMUI.ModelObjectVisualization.SetTemporaryState(changedBeams, new TSMUI.Color(1, 1, 0));
-            TSMUI.ModelObjectVisualization.SetTemporaryState(addedBeams, new TSMUI.Color(0.1, 0.6, 1));
             TSMUI.ModelObjectVisualization.SetTemporaryState(noChangeBeams, new TSMUI.Color(0.2, 0.8, 0.2));
+            TSMUI.ModelObjectVisualization.SetTemporaryState(addedBeams, new TSMUI.Color(0.1, 0.6, 1));
+            TSMUI.ModelObjectVisualization.SetTemporaryState(changedBeams, new TSMUI.Color(1, 1, 0));
 
             var drawer = new TSMUI.GraphicsDrawer();
             var rows = this.DataGridView.Rows;

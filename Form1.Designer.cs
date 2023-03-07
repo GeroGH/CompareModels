@@ -149,7 +149,7 @@
             this.BlueLabel.Name = "BlueLabel";
             this.BlueLabel.Size = new System.Drawing.Size(104, 13);
             this.BlueLabel.TabIndex = 10;
-            this.BlueLabel.Text = "- Blue (Added Beam)";
+            this.BlueLabel.Text = "- Blue (Beam Added)";
             // 
             // MagentaLabel
             // 
@@ -168,7 +168,7 @@
             this.VersionLabel.Name = "VersionLabel";
             this.VersionLabel.Size = new System.Drawing.Size(34, 13);
             this.VersionLabel.TabIndex = 12;
-            this.VersionLabel.Text = "v2.21";
+            this.VersionLabel.Text = "v2.42";
             // 
             // buttonHighlightElements
             // 
@@ -199,8 +199,11 @@
             this.Controls.Add(this.Compare);
             this.Controls.Add(this.Import);
             this.Controls.Add(this.Export);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "CompareTwoModels";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "CompareTwoModels";
+            this.TopMost = true;
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
