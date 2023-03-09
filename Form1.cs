@@ -33,7 +33,7 @@ namespace CompareTwoModels
             this.DataTable.Columns.Add("StartZ", typeof(string));
             this.DataTable.Columns.Add("EndX", typeof(string));
             this.DataTable.Columns.Add("EndY", typeof(string));
-            this.DataTable.Columns.Add("EndZ", typeof(string));
+            this.DataTable.Columns.Add("EndZ", typeof(part));
 
             var up = new UserPropertyItem
             {
@@ -463,6 +463,13 @@ namespace CompareTwoModels
         {
             var ds = new DataSet();
             ds.ReadXml(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DataFile.xml"));
+
+            var query = this.DataTable.AsEnumerable().Where(r => r.Field<string>("Profile").Contains("UB406"));
+
+            foreach (var item in query)
+            {
+                item["Change"] = "UB406";
+            }
 
             this.DataTable = ds.Tables["ModelData"];
             this.DataTable = this.DataTable.DefaultView.ToTable(true);
