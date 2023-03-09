@@ -369,7 +369,6 @@ namespace CompareTwoModels
             this.Delta = int.Parse(this.DeltaBox.Text);
         }
 
-
         private void buttonHighlightElements_Click(object sender, EventArgs e)
         {
             TSMUI.ModelObjectVisualization.ClearAllTemporaryStates();
@@ -402,7 +401,6 @@ namespace CompareTwoModels
                     changedBeams.Add(id);
                     continue;
                 }
-
             }
 
             TSMUI.ModelObjectVisualization.ClearAllTemporaryStates();
@@ -433,6 +431,7 @@ namespace CompareTwoModels
                 }
             }
         }
+
         private void RedrawViews()
         {
             var VisibleViews = TSMUI.ViewHandler.GetVisibleViews();
@@ -441,6 +440,7 @@ namespace CompareTwoModels
                 TSMUI.ViewHandler.RedrawView(VisibleViews.Current);
             }
         }
+
         private void UpdateSecondayParts(Beam beam, string status)
         {
             //var assembly = beam.GetAssembly();
@@ -457,6 +457,24 @@ namespace CompareTwoModels
             //    secondaryBeam.SetUserProperty("Status", status);
             //    secondaryBeam.Modify();
             //}
+        }
+
+        private void dbSqlButton_Click(object sender, EventArgs e)
+        {
+            var ds = new DataSet();
+            ds.ReadXml(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DataFile.xml"));
+
+            this.DataTable = ds.Tables["ModelData"];
+            this.DataTable = this.DataTable.DefaultView.ToTable(true);
+            this.DataTable.DefaultView.Sort = "COID";
+            this.DataGridView.DataSource = this.DataTable;
+            this.DataGridView.RowHeadersVisible = false;
+            this.DataGridView.AllowUserToResizeRows = true;
+            this.DataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            this.DataGridView.AllowUserToAddRows = false;
+            this.DataGridView.ReadOnly = true;
+            this.DataGridView.ColumnHeadersVisible = true;
+            this.DataGridView.DefaultCellStyle.BackColor = Color.White;
         }
     }
 }

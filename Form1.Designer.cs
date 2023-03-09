@@ -42,6 +42,7 @@
             this.MagentaLabel = new System.Windows.Forms.Label();
             this.VersionLabel = new System.Windows.Forms.Label();
             this.buttonHighlightElements = new System.Windows.Forms.Button();
+            this.dbSqlButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -180,11 +181,22 @@
             this.buttonHighlightElements.UseVisualStyleBackColor = true;
             this.buttonHighlightElements.Click += new System.EventHandler(this.buttonHighlightElements_Click);
             // 
+            // dbSqlButton
+            // 
+            this.dbSqlButton.Location = new System.Drawing.Point(771, 27);
+            this.dbSqlButton.Name = "dbSqlButton";
+            this.dbSqlButton.Size = new System.Drawing.Size(237, 59);
+            this.dbSqlButton.TabIndex = 14;
+            this.dbSqlButton.Text = "DB Sql";
+            this.dbSqlButton.UseVisualStyleBackColor = true;
+            this.dbSqlButton.Click += new System.EventHandler(this.dbSqlButton_Click);
+            // 
             // CompareTwoModels
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1277, 451);
+            this.ClientSize = new System.Drawing.Size(1275, 451);
+            this.Controls.Add(this.dbSqlButton);
             this.Controls.Add(this.buttonHighlightElements);
             this.Controls.Add(this.VersionLabel);
             this.Controls.Add(this.MagentaLabel);
@@ -226,6 +238,7 @@
         private System.Windows.Forms.Label MagentaLabel;
         private System.Windows.Forms.Label VersionLabel;
         private System.Windows.Forms.Button buttonHighlightElements;
+        private System.Windows.Forms.Button dbSqlButton;
     }
 }
 
