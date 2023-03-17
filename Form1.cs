@@ -33,7 +33,8 @@ namespace CompareTwoModels
             this.DataTable.Columns.Add("StartZ", typeof(string));
             this.DataTable.Columns.Add("EndX", typeof(string));
             this.DataTable.Columns.Add("EndY", typeof(string));
-            this.DataTable.Columns.Add("EndZ", typeof(part));
+            this.DataTable.Columns.Add("EndZ", typeof(string));
+            this.DataTable.Columns.Add("ID", typeof(Identifier));
 
             var up = new UserPropertyItem
             {
@@ -59,8 +60,8 @@ namespace CompareTwoModels
 
             foreach (var beam in this.BeamsList)
             {
-                ExtractDataFromBeam(beam, out var Profile, out var AssemblyNumber, out var StartX, out var StartY, out var StartZ, out var EndX, out var EndY, out var EndZ, out var COID);
-                this.DataTable.Rows.Add(COID, Profile, AssemblyNumber, StartX, StartY, StartZ, EndX, EndY, EndZ);
+                ExtractDataFromBeam(beam, out var Profile, out var AssemblyNumber, out var StartX, out var StartY, out var StartZ, out var EndX, out var EndY, out var EndZ, out var COID, out var id);
+                this.DataTable.Rows.Add(COID, Profile, AssemblyNumber, StartX, StartY, StartZ, EndX, EndY, EndZ, id);
             }
 
             this.DataTable = this.DataTable.DefaultView.ToTable(true);
@@ -127,7 +128,7 @@ namespace CompareTwoModels
             {
                 var status = string.Empty;
 
-                ExtractDataFromBeam(beam, out var beamProfile, out var beamAssemblyNumber, out var beamStartX, out var beamStartY, out var beamStartZ, out var beamEndX, out var beamEndY, out var beamEndZ, out var beamCOID);
+                ExtractDataFromBeam(beam, out var beamProfile, out var beamAssemblyNumber, out var beamStartX, out var beamStartY, out var beamStartZ, out var beamEndX, out var beamEndY, out var beamEndZ, out var beamCOID, out var id);
 
                 foreach (DataGridViewRow row in rows)
                 {
@@ -302,8 +303,8 @@ namespace CompareTwoModels
                 beam.GetReportProperty("Status", ref status);
                 if (status == "")
                 {
-                    ExtractDataFromBeam(beam, out var Profile, out var AssemblyNumber, out var StartX, out var StartY, out var StartZ, out var EndX, out var EndY, out var EndZ, out var COID);
-                    this.DataTable.Rows.Add(COID, Profile, AssemblyNumber, StartX, StartY, StartZ, EndX, EndY, EndZ);
+                    ExtractDataFromBeam(beam, out var Profile, out var AssemblyNumber, out var StartX, out var StartY, out var StartZ, out var EndX, out var EndY, out var EndZ, out var COID, out var id);
+                    this.DataTable.Rows.Add(COID, Profile, AssemblyNumber, StartX, StartY, StartZ, EndX, EndY, EndZ, id);
                     beam.SetUserProperty("Status", "Beam Added");
                 }
             }
@@ -344,7 +345,7 @@ namespace CompareTwoModels
             }
         }
 
-        private static void ExtractDataFromBeam(Beam beam, out string Profile, out string AssemblyNumber, out double StartX, out double StartY, out double StartZ, out double EndX, out double EndY, out double EndZ, out string COID)
+        private static void ExtractDataFromBeam(Beam beam, out string Profile, out string AssemblyNumber, out double StartX, out double StartY, out double StartZ, out double EndX, out double EndY, out double EndZ, out string COID, out Identifier id)
         {
             Profile = beam.Profile.ProfileString;
 
@@ -359,6 +360,8 @@ namespace CompareTwoModels
             EndY = Math.Round(beam.EndPoint.Y);
             EndZ = Math.Round(beam.EndPoint.Z);
 
+            id = beam.Identifier;
+
             COID = $"{Profile},{AssemblyNumber},{StartX},{StartY},{StartZ},{EndX},{EndY},{EndZ}";
         }
 
@@ -369,7 +372,7 @@ namespace CompareTwoModels
             this.Delta = int.Parse(this.DeltaBox.Text);
         }
 
-        private void buttonHighlightElements_Click(object sender, EventArgs e)
+        private void ButtonHighlightElements_Click(object sender, EventArgs e)
         {
             TSMUI.ModelObjectVisualization.ClearAllTemporaryStates();
             this.RedrawViews();
@@ -441,47 +444,29 @@ namespace CompareTwoModels
             }
         }
 
-        private void UpdateSecondayParts(Beam beam, string status)
-        {
-            //var assembly = beam.GetAssembly();
-            //var secondaryParts = assembly.GetSecondaries();
-
-            //foreach (var secondaryPart in secondaryParts)
-            //{
-            //    var secondaryBeam = secondaryPart as Beam;
-            //    if (secondaryBeam == null)
-            //    {
-            //        continue;
-            //    }
-
-            //    secondaryBeam.SetUserProperty("Status", status);
-            //    secondaryBeam.Modify();
-            //}
-        }
-
-        private void dbSqlButton_Click(object sender, EventArgs e)
+        private void DBSqlButton_Click(object sender, EventArgs e)
         {
             var ds = new DataSet();
             ds.ReadXml(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "DataFile.xml"));
+            var query = this.DataTable.AsEnumerable().Where(item => item.Field<string>("AssemblyNumber").Contains("B"));
+            this.DataGridView.DataSource = query.AsDataView();
+        }
 
-            var query = this.DataTable.AsEnumerable().Where(r => r.Field<string>("Profile").Contains("UB406"));
+        private void DataGridView_RowEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            //var mos = new ModelObjectSelector();
+            //var parts = new ArrayList();
 
-            foreach (var item in query)
+            if (this.DataGridView.SelectedRows.Count > 0)
             {
-                item["Change"] = "UB406";
+                foreach (DataGridViewRow row in this.DataGridView.SelectedRows)
+                {
+                    MessageBox.Show(row.Cells["ID"].Value.ToString());
+                    //parts.Add(beam);
+                }
             }
 
-            this.DataTable = ds.Tables["ModelData"];
-            this.DataTable = this.DataTable.DefaultView.ToTable(true);
-            this.DataTable.DefaultView.Sort = "COID";
-            this.DataGridView.DataSource = this.DataTable;
-            this.DataGridView.RowHeadersVisible = false;
-            this.DataGridView.AllowUserToResizeRows = true;
-            this.DataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            this.DataGridView.AllowUserToAddRows = false;
-            this.DataGridView.ReadOnly = true;
-            this.DataGridView.ColumnHeadersVisible = true;
-            this.DataGridView.DefaultCellStyle.BackColor = Color.White;
+            //mos.Select(parts, false);
         }
     }
 }

@@ -73,6 +73,7 @@
             this.DataGridView.Name = "DataGridView";
             this.DataGridView.Size = new System.Drawing.Size(1012, 425);
             this.DataGridView.TabIndex = 2;
+            this.DataGridView.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_RowEnter);
             // 
             // Compare
             // 
@@ -179,7 +180,7 @@
             this.buttonHighlightElements.TabIndex = 13;
             this.buttonHighlightElements.Text = "Highlight Elements";
             this.buttonHighlightElements.UseVisualStyleBackColor = true;
-            this.buttonHighlightElements.Click += new System.EventHandler(this.buttonHighlightElements_Click);
+            this.buttonHighlightElements.Click += new System.EventHandler(this.ButtonHighlightElements_Click);
             // 
             // dbSqlButton
             // 
@@ -187,9 +188,9 @@
             this.dbSqlButton.Name = "dbSqlButton";
             this.dbSqlButton.Size = new System.Drawing.Size(237, 59);
             this.dbSqlButton.TabIndex = 14;
-            this.dbSqlButton.Text = "DB Sql";
+            this.dbSqlButton.Text = "Filter \"B\"";
             this.dbSqlButton.UseVisualStyleBackColor = true;
-            this.dbSqlButton.Click += new System.EventHandler(this.dbSqlButton_Click);
+            this.dbSqlButton.Click += new System.EventHandler(this.DBSqlButton_Click);
             // 
             // CompareTwoModels
             // 
