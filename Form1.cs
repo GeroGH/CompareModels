@@ -345,7 +345,7 @@ namespace CompareTwoModels
             }
         }
 
-        private static void ExtractDataFromBeam(Beam beam, out string Profile, out string AssemblyNumber, out double StartX, out double StartY, out double StartZ, out double EndX, out double EndY, out double EndZ, out string COID, out Identifier id)
+        private static void ExtractDataFromBeam(Beam beam, out string Profile, out string AssemblyNumber, out double StartX, out double StartY, out double StartZ, out double EndX, out double EndY, out double EndZ, out string COID, out var id)
         {
             Profile = beam.Profile.ProfileString;
 
@@ -461,7 +461,8 @@ namespace CompareTwoModels
             {
                 foreach (DataGridViewRow row in this.DataGridView.SelectedRows)
                 {
-                    MessageBox.Show(row.Cells["ID"].Value.ToString());
+                    var id = (Identifier)row.Cells["ID"].Value;
+                    MessageBox.Show(id);
                     //parts.Add(beam);
                 }
             }
