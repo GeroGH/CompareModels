@@ -454,9 +454,14 @@ namespace CompareTwoModels
             //        continue;
             //    }
 
+            //mos.Select(parts, false);
+
+            //Test Line Here
             //    secondaryBeam.SetUserProperty("Status", status);
             //    secondaryBeam.Modify();
             //}
+
+            //Seccond Test Line Here
         }
     }
 }
